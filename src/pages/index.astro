@@ -1,0 +1,45 @@
+---
+import Counter from "../components/Counter.astro";
+import DeferredWrapper from "../components/DeferredWrapper.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Server Island Script Bug</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; }
+      .test { margin: 2rem 0; padding: 1rem; background: #f5f5f5; border-radius: 8px; }
+      h2 { margin-top: 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Server Island Script Bug — Minimal Reproduction</h1>
+
+    <div class="test">
+      <h2>✅ Control: Counter rendered directly on the page</h2>
+      <p>This button works because the script is included in the page.</p>
+      <Counter />
+    </div>
+
+    <div class="test">
+      <h2>🐛 Bug: Counter passed as slot to server:defer component</h2>
+      <p>This button does NOT work. The Counter HTML renders but its <code>&lt;script&gt;</code> is silently dropped.</p>
+      <p>Note: the control Counter's script doesn't help here either — it already ran <em>before</em> the island response injected this Counter into the DOM.</p>
+      <DeferredWrapper server:defer>
+        <div slot="fallback">⏳ Loading server island...</div>
+        <Counter slot="content" />
+      </DeferredWrapper>
+    </div>
+
+    <div class="test">
+      <h2>How to verify</h2>
+      <ol>
+        <li>Open DevTools → Console. You should see <code>✅ Counter script executed</code> only <strong>once</strong> (from the control), not twice.</li>
+        <li>Click "Increment" on the first counter — it works.</li>
+        <li>Click "Increment" on the second counter — nothing happens.</li>
+        <li>Open DevTools → Network: inspect the <code>/_server-islands/</code> response — it contains the Counter HTML but zero <code>&lt;script&gt;</code> tags.</li>
+      </ol>
+    </div>
+  </body>
+</html>

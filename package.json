@@ -1,0 +1,13 @@
+{
+  "name": "astro-server-island-script-bug",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "5.17.3",
+    "@astrojs/node": "^9.1.3"
+  }
+}

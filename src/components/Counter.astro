@@ -1,0 +1,38 @@
+---
+// A simple component with a <script> that adds interactivity
+---
+
+<div class="counter">
+  <p>Count: <span data-count>0</span></p>
+  <button data-increment>Increment</button>
+</div>
+
+<style>
+  .counter {
+    border: 2px solid #333;
+    padding: 1rem;
+    border-radius: 8px;
+    display: inline-block;
+  }
+  button {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+</style>
+
+<script>
+  document.querySelectorAll("[data-increment]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const countEl = btn.previousElementSibling?.querySelector("[data-count]");
+      if (countEl) {
+        countEl.textContent = String(Number(countEl.textContent) + 1);
+      }
+    });
+  });
+  console.log("✅ Counter script executed");
+</script>
